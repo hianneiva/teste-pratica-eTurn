@@ -21,6 +21,7 @@ namespace testePraticaETurn.Model
         ///<summary>
         /// Constructor.
         ///</summary>
+        ///<param name="name">The name of the city.</param>
         public City(string name)
         {
             Name = name;
