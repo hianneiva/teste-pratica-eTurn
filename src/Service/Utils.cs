@@ -170,6 +170,54 @@ namespace testePraticaETurn.Service
             }
         }
 
+        ///<summary>
+        /// Find all cyclical paths given one city, considering the distance and with a upper value limit.
+        ///</summary>
+        ///<param name="cities">The cities which paths will be searched on.</param>
+        ///<param name="loopStart">The first city in the loop.</param>
+        ///<param name="limit">The upper distance limit.</param>
+        public static void FindCyclicalPathsWithUpperLimit(this IList<City> cities, string loopStart, int limit)
+        {
+
+        }
+
+        /// <summary>
+        /// Finds all paths for cities with a maximum limit distance, considering the current graph.
+        /// </summary>
+        /// <param name="cities">The list of cities in which the search will be done.</param>
+        /// <param name="start">The starting city for the path.</param>
+        /// <param name="maxDistance">The maximum distance considered for the path.</param>
+        public static void FindAllLoopsGivenLimit(this IList<City> cities, string loopStart, int maxDistance)
+        {
+            /**
+             * Não consegui implementar uma solução genérica. Experimentei com algoritmos diversos,
+             * como DFS (Depth First Search) e BFS (Breadth First Search), mas não consegui fazer uma
+             * solução que independesse do grafo em questão.
+             *
+             * Minha ideia de solução foi de buscar todos os caminhos cíclicos mínimos únicos, ou seja,
+             * aqueles que começam e terminam em C, mas os nós internos não se repetem. E há três:
+             *
+             * 1. CDC;
+             * 2. CDEBC;
+             * 3. CEBC.
+             *
+             * A partir desses caminhos, buscar seus respectivos valores de distância e ver quais
+             * combinações respeitam o limite estabelecido de distância máxima. Através desses cálculos
+             * seria possível achar as combinações de caminhos e, por conseguinte, a quantidade de
+             * caminhos cuja distância é menor que a estabelecida.
+             *
+             * Minha maior dificuldade foi aplicar uma regra de limite de busca, dentro dos algoritmos,
+             * para evitar recursão infinita, pela natureza cíclica do grafo. E também de expandir o
+             * número de caminhos únicos dinamicamente, numa tentativa de implementação própria da solução.
+             *
+             * Outra dificuldade encontrada foi a de como seriam permutadas todas as combinações possíveis
+             * entre as distâncias de todos os caminhos, estes que repeitassem o limite estabelecido.
+             **/
+
+            throw new NotSupportedException("Not implemented.");
+        }
+
+        #region Internal Methods
         private static int[,] BuildPathBasicMatrix(IList<City> cities)
         {
             int matrixSize = cities.Count;
@@ -322,5 +370,6 @@ namespace testePraticaETurn.Service
 
             Console.WriteLine("===========");
         }
+        #endregion
     }
 }

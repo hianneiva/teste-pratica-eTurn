@@ -19,7 +19,8 @@ namespace testePraticaETurn
             cities.SearchPathsWithNStops(4, "A", "C", true);    // #07 - Caminhos possíveis A,C com 4 passos
             cities.FindShortestPath("A", "C");                  // 08 - Menor distância de viagem A,C
             cities.FindShortestPath("B", "B");                  // 09 - Menor distância de viagem B,B
-            // 10 - Viagens C,C com dist. < 30
+            // Obs.: Questão 10 não foi implementada.
+            cities.FindAllLoopsGivenLimit("C", 30);             // 10 - Viagens C,C com dist. < 30
         }
     }
 }
