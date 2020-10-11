@@ -137,6 +137,39 @@ namespace testePraticaETurn.Service
             }
         }
 
+        ///<summary>
+        /// The method that will find the shortest path between two cities.
+        /// Note: Dijkstra's algorithm assume self distance as always 0 (Zero distance),
+        /// because of that, self distances are set by calculating the minimal distance that's not zero.
+        ///</summary>
+        ///<param name="cities">The cities which paths will be searched on.</param>
+        ///<param name="start">The first city in the path.</param>
+        ///<param name="end">The last city in the path.</param>
+        public static void FindShortestPath(this IList<City> cities, string start, string end)
+        {
+            if (!start.Equals(end))
+            {
+                int[,] weighedMatrix = BuildPathMatrix(cities);
+                int[] distances = Dijkstra(weighedMatrix, CITY_INDEXES[start]);
+                Console.WriteLine(distances[CITY_INDEXES[end]]);
+            }
+            else
+            {
+                int distance = 0;
+                City city = cities.FirstOrDefault(c => start.Equals(c.Name));
+
+                do
+                {
+                    KeyValuePair<string, int> next =
+                        city.Paths.Aggregate((path, nextPath) => path.Value < nextPath.Value ? path : nextPath);
+                    distance += next.Value;
+                    city = cities.FirstOrDefault(c => next.Key.Equals(c.Name));
+                } while (!end.Equals(city.Name));
+
+                Console.WriteLine(distance);
+            }
+        }
+
         private static int[,] BuildPathBasicMatrix(IList<City> cities)
         {
             int matrixSize = cities.Count;
@@ -220,6 +253,53 @@ namespace testePraticaETurn.Service
 
             // PrintSquareMatrix(current);
             return current;
+        }
+
+        private static int MinDistance(int[] distance, bool[] shortestPathTreeSet, int verticesTotal)
+        {
+            int min = int.MaxValue;
+            int minIndex = -1;
+
+            for (int i = 0; i < verticesTotal; i++)
+                if (shortestPathTreeSet[i] == false && distance[i] <= min)
+                {
+                    min = distance[i];
+                    minIndex = i;
+                }
+
+            return minIndex;
+        }
+
+        private static int[] Dijkstra(int[,] graph, int source)
+        {
+            int verticesTotal = graph.GetLength(0);
+            int[] distance = new int[verticesTotal];
+            bool[] shortestPathTreeSet = new bool[verticesTotal];
+
+            for (int i = 0; i < verticesTotal; i++)
+            {
+                distance[i] = int.MaxValue;
+                shortestPathTreeSet[i] = false;
+            }
+
+            distance[source] = 0;
+
+            for (int count = 0; count < verticesTotal - 1; count++)
+            {
+                int u = MinDistance(distance, shortestPathTreeSet, verticesTotal);
+                shortestPathTreeSet[u] = true;
+
+                for (int i = 0; i < verticesTotal; i++)
+                    if (!shortestPathTreeSet[i] &&
+                        graph[u, i] != 0 &&
+                        distance[u] != int.MaxValue &&
+                        distance[u] + graph[u, i] < distance[i])
+                    {
+                        distance[i] = distance[u] + graph[u, i];
+                    }
+            }
+
+            return distance;
         }
 
         private static void PrintSquareMatrix(int[,] matrix)
